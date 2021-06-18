@@ -13,7 +13,7 @@ class MyRoom extends Room {
   }
 }
 
-const port = Number(process.env.port) || 3030;
+const port = Number(process.env.PORT) || 3030;
 
 const app = express();
 app.use(express.json());
