@@ -29,10 +29,10 @@ class MyRoom extends Room {
   async onDispose() {
     this.presence.srem(this.LOBBY_CHANNEL, this.roomId);
   }
-  async onCreate(d) {
+  async onCreate(data) {
     console.log('room created.');
     this.setState(new MyState());
-    this.generateRoomId(d.channel);
+    this.generateRoomId(data.channel);
 
     this.onMessage('up', (client, message) => {
       console.log(this.state);
@@ -40,17 +40,21 @@ class MyRoom extends Room {
       this.broadcast('up', { message, date: new Date() });
     });
 
-    this.onMessage("move", (client, data) => {
+    this.onMessage('repCount', (client, data) => {
       const player = this.state.players.get(client.sessionId);
-      player.x = data.x;
-      player.y = data.y;
-      player.z = data.z;
-      console.log(data)
+      player.repCount += 1;
+      console.log(data);
     });
   }
 
   onJoin(client: Client, options: any) {
     this.state.players.set(client.sessionId, new Player());
+  }
+
+  onLeave(client) {
+    if (this.state.players.has(client.sessionId)) {
+      this.state.players.delete(client.sessionId);
+    }
   }
 }
 

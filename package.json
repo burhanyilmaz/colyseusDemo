@@ -35,7 +35,8 @@
     "dev": "nodemon --watch './**/*.ts' --ext 'ts,json'  --ignore './dist' --ignore './src/test' --exec 'yarn build && node dist/src/index'",
     "test": "yarn jest -i || pkill node",
     "js": "npx schema-codegen src/state/* --ts --output ./schemas/js",
-    "csharp": "npx schema-codegen src/state/* --csharp --output ./schemas/csStates"
+    "csharp": "npx schema-codegen src/state/* --csharp --output ./schemas/csStates",
+    "generate-schema": "yarn js && yarn csharp"
   },
   "engines": {
     "node": "14.x"
