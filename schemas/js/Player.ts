@@ -9,4 +9,5 @@ import { Schema, type, ArraySchema, MapSchema, DataChange } from '@colyseus/sche
 
 export class Player extends Schema {
   @type('number') public repCount!: number;
+  @type('string') public id!: string;
 }

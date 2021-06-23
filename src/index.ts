@@ -15,7 +15,9 @@ const basicAuthMiddleware = basicAuth({
 
 class MyRoom extends Room {
   LOBBY_CHANNEL = '$mylobby';
-  COLYSEUS_SEAT_RESERVATION_TIME = 1500;
+  DEFAULT_SEAT_RESERVATION_TIME = 1500;
+  seatReservationTime = 10000;
+
   async generateRoomId(customId) {
     const currentIds = await this.presence.smembers(this.LOBBY_CHANNEL);
     if (!currentIds.includes(customId)) {
@@ -27,12 +29,13 @@ class MyRoom extends Room {
   }
 
   async onDispose() {
-    this.presence.srem(this.LOBBY_CHANNEL, this.roomId);
+    await this.presence.srem(this.LOBBY_CHANNEL, this.roomId);
+    await this.disconnect();
   }
   async onCreate(data) {
-    console.log('room created.');
+    console.log('room created.', this.seatReservationTime);
     this.setState(new MyState());
-    this.generateRoomId(data.channel);
+    await this.generateRoomId(data.channel);
 
     this.onMessage('up', (client, message) => {
       console.log(this.state);
@@ -43,6 +46,7 @@ class MyRoom extends Room {
     this.onMessage('repCount', (client, data) => {
       const player = this.state.players.get(client.sessionId);
       player.repCount += 1;
+      player.id = client.id;
       console.log(data);
     });
   }

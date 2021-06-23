@@ -10,5 +10,8 @@ using Colyseus.Schema;
 public partial class Player : Schema {
 	[Type(0, "number")]
 	public float repCount = default(float);
+
+	[Type(1, "string")]
+	public string id = default(string);
 }
 
